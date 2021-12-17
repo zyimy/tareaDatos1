@@ -1,0 +1,30 @@
+<list>
+  <cafe>
+    <nombre>sdsds</nombre>
+    <IdProveedor>33</IdProveedor>
+    <precio>33.0</precio>
+    <ventas>22</ventas>
+    <total>22</total>
+  </cafe>
+  <cafe>
+    <nombre>sdsd</nombre>
+    <IdProveedor>88</IdProveedor>
+    <precio>44.0</precio>
+    <ventas>44</ventas>
+    <total>99</total>
+  </cafe>
+  <cafe>
+    <nombre>Oro</nombre>
+    <IdProveedor>44</IdProveedor>
+    <precio>99.0</precio>
+    <ventas>55</ventas>
+    <total>88</total>
+  </cafe>
+  <cafe>
+    <nombre>Maya</nombre>
+    <IdProveedor>44</IdProveedor>
+    <precio>88.0</precio>
+    <ventas>22</ventas>
+    <total>66</total>
+  </cafe>
+</list>
