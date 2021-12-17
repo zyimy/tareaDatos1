@@ -41,7 +41,7 @@ public class TareaDatos1 {
         do {
             opcion = Integer.parseInt(JOptionPane.showInputDialog("  MENU\nEJERCICIO 1\nEJERCICIO 2 PERSISTENCIA\n"
                     + "EJERCICIO 3 OUPUT INPUT \n"
-                    + "EJERCICIO 4\nINGRESE UNA OPCION "));
+                    + "EJERCICIO 4\nEJERCICIO 5\nINGRESE UNA OPCION "));
 
             switch (opcion) {
 
@@ -87,6 +87,13 @@ public class TareaDatos1 {
                     xml = aliasPackage(xstream, lista);
                     JOptionPane.showMessageDialog(null, xml);
 
+                    break;
+                    
+                case 5:
+                    
+                 xml= xmlEjercicioCinco(xstream,objectoPersona());  
+                    
+                  JOptionPane.showMessageDialog(null, xml);  
                     break;
 
             }
@@ -170,6 +177,30 @@ public class TareaDatos1 {
         xstream.addPermission(AnyTypePermission.ANY);
 
         String xml = xstream.toXML(lista);
+
+        return xml;
+
+    }
+    
+    public static Persona objectoPersona(){
+        
+        Persona persona = new Persona();
+        Telefono telefono = new Telefono();
+        telefono.setCodigo(34);
+        telefono.setNumero(603189604);
+        persona.setNombre("Yimy");
+        persona.setApellido("Zepeda");
+        persona.setTelefono(telefono);
+        return persona;
+    }
+    
+      public static String xmlEjercicioCinco(XStream xstream, Persona persona) {
+
+        xstream.alias("persona", Persona.class);
+        xstream.alias("telefono", Telefono.class);
+        xstream.addPermission(AnyTypePermission.ANY);
+
+        String xml = xstream.toXML(persona);
 
         return xml;
 
