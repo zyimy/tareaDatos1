@@ -25,7 +25,6 @@ import javax.swing.JOptionPane;
  */
 public class TareaDatos1 {
 
-    static XStream xstream;
     static Cafe cafe;
     static PersistenceStrategy strategy;
     static XmlArrayList lista;
@@ -33,7 +32,8 @@ public class TareaDatos1 {
     static ObjectOutputStream out;
 
     public static void main(String[] args) throws IOException {
-
+        XStream xstream = new XStream(new DomDriver());
+        ArrayList<Cafe> lista;
         String xml = "";
 
         int opcion = 0;
@@ -48,13 +48,12 @@ public class TareaDatos1 {
                 //Ejercicio 1
                 case 1:
 
-                    ArrayList<Cafe> lista = listaCafe();
-                    xstream = new XStream(new DomDriver());
-                    String xmls = devolverXml(xstream, lista);
+                    lista = listaCafe();
+                    xml = devolverXml(xstream, lista);
 
                     try {
-                        JOptionPane.showMessageDialog(null, xmls);
-                        JOptionPane.showMessageDialog(null, XmlToFromXml(xmls, xstream).toString());
+                        JOptionPane.showMessageDialog(null, xml);
+                        JOptionPane.showMessageDialog(null, XmlToFromXml(xml, xstream).toString());
                     } catch (XStreamException e) {
                         System.out.println(e);
 
@@ -65,7 +64,6 @@ public class TareaDatos1 {
                 case 2:
                     try {
 
-                        xstream = new XStream(new DomDriver());
                         strategy = objectoPersistente(xstream);
                         listaCafePersistent(strategy);
 
@@ -78,8 +76,16 @@ public class TareaDatos1 {
 
                 case 3:
 
-                    xstream = new XStream(new DomDriver());
                     crearObjetoOuput(xstream, "xml.txt");
+
+                    break;
+
+                case 4:
+
+                    lista = listaCafe();
+
+                    xml = aliasPackage(xstream, lista);
+                    JOptionPane.showMessageDialog(null, xml);
 
                     break;
 
@@ -153,6 +159,19 @@ public class TareaDatos1 {
         ObjectOutputStream write = xstreams.createObjectOutputStream(new FileOutputStream(directorio));
         write.writeObject(listaCafe());
         write.close();
+
+    }
+
+    public static String aliasPackage(XStream xstream, ArrayList<Cafe> lista) {
+
+        xstream.alias("cafe", Cafe.class);
+        xstream.aliasPackage("miCafe", "tareadatos1");
+        xstream.aliasField("IdProveedor", Cafe.class, "proveedorId");
+        xstream.addPermission(AnyTypePermission.ANY);
+
+        String xml = xstream.toXML(lista);
+
+        return xml;
 
     }
 
