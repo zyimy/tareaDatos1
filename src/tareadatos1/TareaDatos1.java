@@ -16,8 +16,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import static java.nio.file.Files.list;
 import java.util.ArrayList;
+import static java.util.Collections.list;
+import java.util.Iterator;
+
 import javax.swing.JOptionPane;
+import static tareadatos1.TareaDatos1.listas;
 
 /**
  *
@@ -27,7 +32,7 @@ public class TareaDatos1 {
 
     static Cafe cafe;
     static PersistenceStrategy strategy;
-    static XmlArrayList lista;
+    static XmlArrayList listas;
     static Controlador c = new Controlador();
     static ObjectOutputStream out;
 
@@ -41,7 +46,7 @@ public class TareaDatos1 {
         do {
             opcion = Integer.parseInt(JOptionPane.showInputDialog("  MENU\nEJERCICIO 1\nEJERCICIO 2 PERSISTENCIA\n"
                     + "EJERCICIO 3 OUPUT INPUT \n"
-                    + "EJERCICIO 4\nEJERCICIO 5\nINGRESE UNA OPCION "));
+                    + "EJERCICIO 4\nEJERCICIO 5\nEJERCICIO 6\nINGRESE UNA OPCION "));
 
             switch (opcion) {
 
@@ -88,16 +93,23 @@ public class TareaDatos1 {
                     JOptionPane.showMessageDialog(null, xml);
 
                     break;
-                    
+
                 case 5:
-                    
-                 xml= xmlEjercicioCinco(xstream,objectoPersona());  
-                    
-                  JOptionPane.showMessageDialog(null, xml);  
+
+                    xml = xmlEjercicioCinco(xstream, objectoPersona());
+
+                    JOptionPane.showMessageDialog(null, xml);
                     break;
 
+                case 6:
+                    strategy = ejercicioCincoPersistente(xstream, ".", "Persona", Persona.class);
+                    listaPersistentEjercicioCinco(strategy, objectoPersona());
+
+                    break;
             }
+
         } while (opcion != 0);
+
     }
 
     //Metodo que nos devuelve un objecto  cafe
@@ -124,10 +136,14 @@ public class TareaDatos1 {
     }
 
     //Metodo que nos devuelve un xml
-    public static String devolverXml(XStream xstream, ArrayList<Cafe> lista) {
+    public static String
+            devolverXml(XStream xstream, ArrayList<Cafe> lista) {
 
-        xstream.alias("cafe", Cafe.class);
-        xstream.aliasField("IdProveedor", Cafe.class, "proveedorId");
+        xstream.alias("cafe", Cafe.class
+        );
+        xstream
+                .aliasField("IdProveedor", Cafe.class,
+                         "proveedorId");
         xstream.addPermission(AnyTypePermission.ANY);
 
         String xml = xstream.toXML(lista);
@@ -147,18 +163,22 @@ public class TareaDatos1 {
     public static PersistenceStrategy objectoPersistente(XStream xstream) {
 
         strategy = new FilePersistenceStrategy(new File("."), xstream);
-        xstream.alias("cafe", Cafe.class);
-        xstream.aliasField("IdProveedor", Cafe.class, "proveedorId");
+        xstream
+                .alias("cafe", Cafe.class
+                );
+        xstream
+                .aliasField("IdProveedor", Cafe.class,
+                         "proveedorId");
 
         return strategy;
     }
 
     public static XmlArrayList listaCafePersistent(PersistenceStrategy strategy) {
         ArrayList<Cafe> miLista = listaCafe();
-        lista = new XmlArrayList(strategy);
-        lista.add(miLista);
+        listas = new XmlArrayList(strategy);
+        listas.add(miLista);
 
-        return lista;
+        return listas;
     }
 
     public static void crearObjetoOuput(XStream xstreams, String directorio) throws IOException {
@@ -169,11 +189,15 @@ public class TareaDatos1 {
 
     }
 
-    public static String aliasPackage(XStream xstream, ArrayList<Cafe> lista) {
+    public static String
+            aliasPackage(XStream xstream, ArrayList<Cafe> lista) {
 
-        xstream.alias("cafe", Cafe.class);
+        xstream.alias("cafe", Cafe.class
+        );
         xstream.aliasPackage("miCafe", "tareadatos1");
-        xstream.aliasField("IdProveedor", Cafe.class, "proveedorId");
+        xstream
+                .aliasField("IdProveedor", Cafe.class,
+                         "proveedorId");
         xstream.addPermission(AnyTypePermission.ANY);
 
         String xml = xstream.toXML(lista);
@@ -181,9 +205,9 @@ public class TareaDatos1 {
         return xml;
 
     }
-    
-    public static Persona objectoPersona(){
-        
+
+    public static Persona objectoPersona() {
+
         Persona persona = new Persona();
         Telefono telefono = new Telefono();
         telefono.setCodigo(34);
@@ -193,17 +217,38 @@ public class TareaDatos1 {
         persona.setTelefono(telefono);
         return persona;
     }
-    
-      public static String xmlEjercicioCinco(XStream xstream, Persona persona) {
 
-        xstream.alias("persona", Persona.class);
-        xstream.alias("telefono", Telefono.class);
+    public static String
+            xmlEjercicioCinco(XStream xstream, Persona persona) {
+
+        xstream.alias("persona", Persona.class
+        );
+        xstream
+                .alias("telefono", Telefono.class
+                );
         xstream.addPermission(AnyTypePermission.ANY);
 
         String xml = xstream.toXML(persona);
 
         return xml;
 
+    }
+
+    public static PersistenceStrategy ejercicioCincoPersistente(XStream xstream, String directorio, String alias, Class clase) {
+
+        strategy = new FilePersistenceStrategy(new File(directorio), xstream);
+        xstream.alias(alias, clase);
+        return strategy;
+    }
+
+    public static XmlArrayList listaPersistentEjercicioCinco(PersistenceStrategy strategy, Persona persona) {
+
+        listas = new XmlArrayList(strategy);
+        listas.add(persona);
+
+      
+
+        return listas;
     }
 
 }
